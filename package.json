@@ -11,7 +11,7 @@
     "stack"
   ],
   "scripts": {
-    "start": "nodemon .",
+    "start":"ts-node index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -29,8 +29,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.7",
-    "tsc-watch": "^6.0.0",
-    "typescript": "^5.0.4"
+    "tsc-watch": "^6.0.0"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -47,6 +46,8 @@
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
     "nodemon": "^2.0.22",
-    "validator": "^13.9.0"
+    "typescript": "^5.0.4",
+    "validator": "^13.9.0",
+    "ts-node": "^10.4.0"
   }
 }
