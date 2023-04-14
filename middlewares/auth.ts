@@ -33,7 +33,7 @@ const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
     if (!token) throw new AppError('Unauthenticated-User',401);
     const result = await verifyToken(token);
     console.log(result.role)
-    if (result.role !== 'admin') throw new AppError('Unauthorized-User',403);
+    if (result.role !== Role.ADMIN) throw new AppError('Unauthorized-User',403);
     req.user = result;
     next();
   } catch (err) {

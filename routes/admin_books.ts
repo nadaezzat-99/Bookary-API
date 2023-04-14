@@ -10,7 +10,7 @@ const router: Router = express.Router();
 
 router.use(adminAuth)
 
-router.post('/', upload.single('bookImage'), validate(booksValidator.bookData), async (req: Request, res: Response, next: NextFunction) => {
+router.post('/', adminAuth,upload.single('bookImage'), validate(booksValidator.bookData), async (req: Request, res: Response, next: NextFunction) => {
     let bookImage = req.file? req.file.path : undefined
     const { name, categoryId, authorId, description } = req.body;
     const book = booksController.create({ name: trimText(name), categoryId, authorId, bookImage,  description });

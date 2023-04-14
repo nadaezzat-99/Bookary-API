@@ -3,7 +3,6 @@ const { userController } = require('../controllers/index');
 const { upload } = require('../middlewares/imageMiddleware');
 const router: Router = express.Router();
 import { asycnWrapper } from '../lib/index';
-const { userAuth } = require('../middlewares/auth');
 const { usersValidator } = require('../Validations');
 const { validate } = require('../middlewares/validation');
 const { authorController } = require('../controllers/index');
@@ -22,7 +21,7 @@ router.post('/register', upload.single('pImage'), validate(usersValidator.signUp
 );
 
 
-router.post('/signin', validate(usersValidator.signIn), async (req: Request, res: Response, next: NextFunction) => {
+router.post('/signin', validate(usersValidator.signIn), async (req: Request, res: Response, next: NextFunction) => {  
   try {
     const { userName, password } = req.body;
     const token = await userController.signIn({ userName, password });
@@ -32,7 +31,6 @@ router.post('/signin', validate(usersValidator.signIn), async (req: Request, res
     next(err);
   }
 });
-
 
 router.get("/logout", async(req:Request, res:Response) => {
   return res.clearCookie("access_token").status(200).json({ message: "Successfully logged out" })});

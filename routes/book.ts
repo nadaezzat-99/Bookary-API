@@ -7,7 +7,8 @@ const { booksValidator, paginationOptions } = require('../Validations');
 const router: Router = express.Router();
 
 router.get('/', validate(paginationOptions) ,async (req: Request, res: Response, next: NextFunction) => {
-const book = booksController.getBooks_fullInfo();
+const { page, limit } = req.query;
+const book = booksController.getBooks_fullInfo({page, limit });
 const [err, data] = await asycnWrapper(book);
 if (err) return next(err);
 res.status(200).json({ success: true, data , result: data.totalDocs });
