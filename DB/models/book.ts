@@ -2,6 +2,7 @@ import { Schema, model } from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
 import { Book, BookModel, Entities } from '../schemaInterfaces';
 const Counters = require('./counter');
+const UserBooks = require('./userBooks');
 
 const schema = new Schema<Book>(
   {
@@ -30,7 +31,7 @@ const schema = new Schema<Book>(
 
     bookImage: {
       type: String,
-      default: 'https://res.cloudinary.com/dttgbrris/image/upload/v1681003634/3899618_mkmx9b.pngs',
+      default: 'https://res.cloudinary.com/dttgbrris/image/upload/v1681003634/3899618_mkmx9b.png',
     },
     description: {
       type: String,
@@ -109,6 +110,11 @@ schema.pre('save', { document: true, query: true }, async function () {
   if (this.isNew) {
     this._id = await Books.getNewId();
   }
+});
+
+schema.post('findOneAndDelete', async function(next) {
+  const bookId = this.getQuery()['_id'];
+  await UserBooks.deleteMany({book:bookId})  
 });
 
 const Books = model<Book, BookModel>('Books', schema);

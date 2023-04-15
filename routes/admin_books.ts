@@ -4,7 +4,7 @@ const { booksValidator, paginationOptions } = require('../Validations');
 const { validate } = require('../middlewares/validation');
 const { adminAuth } = require('../middlewares/auth');
 import { AppError, asycnWrapper, trimText } from '../lib/index';
-import { upload } from '../middlewares/imageMiddleware';
+import { upload, removeImage } from '../middlewares/imageMiddleware';
 
 const router: Router = express.Router();
 
@@ -45,6 +45,10 @@ router.delete('/:id', validate(booksValidator.bookId), async (req: Request, res:
     const [err, data] = await asycnWrapper(deletedBook);
     if (err) return next(err);
     if (!data) return next(new AppError(`No book with ID ${req.params.id}`, 400));
+    console.log(data);
+    console.log(data.bookImage);
+    removeImage(data.bookImage);
+    
     return res.status(204).end();
   }
 );

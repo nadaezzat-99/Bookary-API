@@ -4,13 +4,14 @@ const Books = require('../DB/models/book');
 const UserBooks = require('../DB/models/userBooks');
 import { ObjectId } from 'mongoose';
 import { AppError, trimText } from '../lib/index';
+import { Shelf } from '../DB/schemaInterfaces';
 
-const getUserBooks = async (user: ObjectId, options: { page: number; limit: number }) => {
+const getUserBooks = async (user: ObjectId, options: { page: number; limit: number, shelf: Shelf }) => {
   const pageSize = options.limit ? options.limit : 10;
   const pageNumber = options.page ? options.page : 1;
-  const totalDocs = (await UserBooks.find({ user: user })).length;
+  const totalDocs = (await UserBooks.find({ user: user, shelf:options.shelf })).length;
   const totalPages = Math.floor(totalDocs / pageSize);
-  const docs = await UserBooks.find({ user: user })
+  const docs = await UserBooks.find({ user: user, shelf:options.shelf })
     .populate({
       path: 'book',
       select: 'name bookImage authorId averageRating',
@@ -23,6 +24,7 @@ const getUserBooks = async (user: ObjectId, options: { page: number; limit: numb
     .limit(pageSize);
   return { docs , totalDocs, totalPages };
 };
+
 
 
 const updateTotalRating = async (bookId: number, rating: number, previousRating: number) => {

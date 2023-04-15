@@ -12,7 +12,7 @@ const router : Router = express.Router();
 
 router.use(adminAuth)
 router.post('/', upload.single("authorImg"),validate(authorValidator.validateAuthor),async (req:Request, res:Response, next:NextFunction) => {
-    const authorImg = req.file?.path
+    const authorImg = req.file? req.file.path : undefined
     const incrementalId = await Counter.findOneAndUpdate(
         {id:"authorInc"},
         { $inc: { seq: 1 } },
@@ -39,7 +39,7 @@ router.post('/', upload.single("authorImg"),validate(authorValidator.validateAut
     validate(authorValidator.checkvalidID),
     validate(authorValidator.validateAuthor),
     async (req:Request, res:Response, next:NextFunction) => {
-      const authorImg = req.file?.path
+      const authorImg = req.file? req.file.path : undefined
       const { params:{ id }} = req 
       const { body:{ firstName, lastName, bio, DOB } } = req; 
       const author = authorController.updateAuthor(id,{  firstName, lastName, bio, DOB, authorImg});

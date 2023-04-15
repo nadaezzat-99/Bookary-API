@@ -26,9 +26,10 @@ router.post('/register', upload.single('pImage'), validate(usersValidator.signUp
 router.post('/signin', validate(usersValidator.signIn), async (req: Request, res: Response, next: NextFunction) => {  
   try {
     const { userName, password } = req.body;    
-    const {token, user} = await userController.signIn({ userName, password });    
-    res.cookie('access_token', token, { httpOnly: true})
-      .status(200).json({ user })
+    const data = await userController.signIn({ userName, password });    
+    console.log(data);
+    res.cookie('access_token', data.token, { httpOnly: true})
+      .status(200).json({ user:data.user })
   } catch (err) {
     next(err);
   }

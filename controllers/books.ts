@@ -1,10 +1,11 @@
-import { Book, PaginatedBooks } from '../DB/schemaInterfaces';
-import { AppError,  trimText } from '../lib';
+import { log } from "console";
+import { Book, PaginatedBooks } from "../DB/schemaInterfaces";
+import { AppError, trimText } from "../lib";
 
-const Books = require('../DB/models/book');
-const Categoris = require('../DB/models/category');
-const Authors = require('../DB/models/author');
-const UserBooks = require('../DB/models/userBooks');
+const Books = require("../DB/models/book");
+const Categoris = require("../DB/models/category");
+const Authors = require("../DB/models/author");
+const UserBooks = require("../DB/models/userBooks");
 
 const getBooks = () => Books.find({});
 
@@ -12,16 +13,23 @@ const getBooks = () => Books.find({});
 const create = async (data: Book) => {
   const relatedCategory = await Categoris.findById(data.categoryId);
   const relatedAuthor = await Authors.findById(data.authorId);
-  if (!(relatedAuthor && relatedCategory)) throw new AppError("Category or Author isn't valid", 422);
+  if (!(relatedAuthor && relatedCategory))
+    throw new AppError("Category or Author isn't valid", 422);
   if (data.bookImage) console.log(data.bookImage);
   return Books.create(data);
 };
 
-const getBookById = (_id: number) => Books.findById(_id); 
+const getBookById = (_id: number) => Books.findById(_id);
 
 const editBook = async (
   id: number,
-  data: { name: string; bookImage: string; categoryId: number; authorId: number; description: string }
+  data: {
+    name: string;
+    bookImage: string;
+    categoryId: number;
+    authorId: number;
+    description: string;
+  }
 ) => {
   const book = await Books.findById(id);
   if (!book) throw new AppError(" Book doesn't exist ", 422);
@@ -39,17 +47,18 @@ const editBook = async (
 
 const deleteBook = (id: number) => Books.findByIdAndDelete(id);
 
+
 // Users View --->  Get Book with full data Info (Author name - Category name)
 const getBookById_fullInfo = async (id: number) => {
   const book = await Books.findById(id)
-    .populate({ path: 'authorId', select: 'firstName lastName' })
-    .populate({ path: 'categoryId', select: 'name' })
-    .select('  -createdAt -updatedAt -totalRating')
+    .populate({ path: "authorId", select: "firstName lastName" })
+    .populate({ path: "categoryId", select: "name" })
+    .select(" -createdAt -updatedAt -totalRating")
     .exec();
 
   const reviews = await UserBooks.find({ book: id })
-    .populate({ path: 'user', select: 'firstName lastName userName  ' })
-    .select('review rating firstName lastName userName  ');
+    .populate({ path: "user", select: "firstName lastName userName  " })
+    .select("review rating firstName lastName userName  ");
   return { book, reviews };
 };
 
@@ -60,14 +69,17 @@ const getBooks_fullInfo = async (options: { page: number; limit: number }) => {
     {},
     {
       ...options,
-      populate: ['authorId', 'categoryId'],
-      select: '-createdAt -updatedAt -totalRating ',
+      populate: ["authorId", "categoryId"],
+      select: "-createdAt -updatedAt -totalRating ",
     }
   )) as PaginatedBooks;
   return result as PaginatedBooks;
 };
 
-const getPaginatedBooks = async (options: { page: number; limit: number }): Promise<PaginatedBooks> => {
+const getPaginatedBooks = async (options: {
+  page: number;
+  limit: number;
+}): Promise<PaginatedBooks> => {
   if (!options.limit) options.limit = 10;
   if (!options.page) options.page = 1;
   const result = (await Books.paginate({}, options)) as PaginatedBooks;
@@ -91,15 +103,19 @@ const getPopularBooks = async () =>
             {
               $multiply: [
                 {
-                  $divide: [{ $divide: ['$totalRating', '$ratingsNumber']},5]},.7]},
+                  $divide: [{ $divide: ["$totalRating", "$ratingsNumber"] }, 5],
+                },
+                0.7,
+              ],
+            },
             {
-              $multiply: ['$ratingsNumber',.3],
-        }
-      ]
+              $multiply: ["$ratingsNumber", 0.3],
+            },
+          ],
+        },
       },
-    }
     },
-    
+
     {
       $sort: { popularity: -1 },
     },
@@ -109,7 +125,6 @@ const getPopularBooks = async () =>
     },
   ]);
 
-  
 module.exports = {
   create,
   getBooks,

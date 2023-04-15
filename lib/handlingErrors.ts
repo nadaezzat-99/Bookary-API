@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { AppError, DuplicateKeyError } from './appError';
+import { error } from 'console';
 
 const handleMogooseValidationError = (err: mongoose.Error.ValidationError | DuplicateKeyError) => {
   if (err instanceof mongoose.Error.ValidationError)
@@ -9,6 +10,9 @@ const handleMogooseValidationError = (err: mongoose.Error.ValidationError | Dupl
 };
 
 export const handleResponseError = (err: any, req: Request, res: Response, next: NextFunction) => {
+  if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+     err = new AppError('Unexpected file uploaded',400)
+  }
   if (err instanceof mongoose.Error.ValidationError || err.code === 11000) {
     err = handleMogooseValidationError(err);
   }

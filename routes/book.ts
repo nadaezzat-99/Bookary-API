@@ -16,7 +16,7 @@ res.status(200).json({ success: true, data , result: data.totalDocs });
 
 
 router.get('/popular', async (req: Request, res: Response, next: NextFunction) => {
-const book = booksController.getPopularBooks(req.params.id);
+const book = booksController.getPopularBooks();
 const [err, data] = await asycnWrapper(book);
 if (err) return next(err);
 res.status(200).json({ success: true, data });

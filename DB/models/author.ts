@@ -2,6 +2,10 @@ import { Schema, model } from 'mongoose';
 const validator = require('validator');
 import { Author } from '../schemaInterfaces';
 import mongoosePaginate from 'mongoose-paginate-v2';
+import { AppError } from '../../lib';
+const Books = require('./book');
+
+
 const schema = new Schema<Author>(
   {
     _id: {
@@ -62,6 +66,17 @@ schema.virtual('fullName').get(function () {
   return `${this.firstName}  ${this.lastName}`;
 });
 
-const Author = model('Authors', schema);
 
+schema.pre('findOneAndDelete', async function preDelete(next) {
+  const authorId = this.getQuery()['_id'];
+  const authordata =  await Books.countDocuments({authorId:authorId});
+  if (authordata > 0) {
+      const err = new AppError("Can't delete author with associated books",409)
+      next(err);
+  } else {
+      next();
+  }
+})
+
+const Author = model('Authors', schema);
 module.exports = Author;

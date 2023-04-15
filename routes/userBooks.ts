@@ -9,9 +9,10 @@ const router: Router = express.Router();
 
 router.use(userAuth);
 
-router.get('/books', validate(paginationOptions), async (req: Request, res: Response, next: NextFunction) => {
-  const { page, limit } = req.query;
-  const user = userBooksController.getUserBooks(req.user._id, { page, limit });
+router.get('/books', validate(booksValidator.filter), async (req: Request, res: Response, next: NextFunction) => {
+  const { page, limit, shelf } = req.query;
+  console.log(req.query);
+  const user = userBooksController.getUserBooks(req.user._id, { page, limit, shelf });
   const [err, data] = await asycnWrapper(user);
   if (err) return next(err);
   res.status(200).json({ success: true, data });

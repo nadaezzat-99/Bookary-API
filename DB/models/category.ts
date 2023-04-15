@@ -1,7 +1,9 @@
 import { Schema, model } from 'mongoose';
 import { Category, categoryModel, Entities } from '../schemaInterfaces';
 import mongoosePaginate from 'mongoose-paginate-v2';
+import { AppError } from '../../lib';
 const Counters = require('./counter');
+const Books = require('./book');
 
 const schema = new Schema<Category>(
   {
@@ -54,6 +56,16 @@ schema.pre('save', async function () {
   }
 });
 
+schema.pre('findOneAndDelete', async function preDelete(next) {
+  const categoryId = this.getQuery()['_id'];
+  const relatedBooks =  await Books.countDocuments({categoryId:categoryId});
+  if (relatedBooks > 0) {
+      const err = new AppError("Can't delete category with  books",409);
+      next(err);
+  } else {
+      next();
+  }
+})
 
 const Categoris = model<Category, categoryModel>('Categories', schema);
 

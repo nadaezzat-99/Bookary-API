@@ -15,7 +15,15 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 }
 );
 
-router.get('/:id', validate(categoriesValidator.categoryId), validate(paginationOptions), async (req: Request, res: Response, next: NextFunction) => {
+router.get('/popular', async (req: Request, res: Response, next: NextFunction) => {
+  const categories = categoriesController.getPopularcategories();
+  const [err, data] = await asycnWrapper(categories);
+  if (err) return next(err);
+  res.status(200).json({ success: true, data });
+  });
+  
+
+router.get('/:id/books', validate(categoriesValidator.categoryId), validate(paginationOptions), async (req: Request, res: Response, next: NextFunction) => {
   const {page, limit } = req.query;    
   const books = categoriesController.getCategoyBooks(req.params.id, {page, limit});
   const [err, data] = await asycnWrapper(books);
@@ -23,6 +31,5 @@ router.get('/:id', validate(categoriesValidator.categoryId), validate(pagination
   res.status(200).json({ success: true, data, result: data.length });
 }
 );
-
 
 module.exports = router;

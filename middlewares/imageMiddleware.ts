@@ -5,6 +5,15 @@ const path = require('path');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
+
+// Configuration 
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+});
+
+
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -20,15 +29,16 @@ const storage = new CloudinaryStorage({
           return `random-imgs`;
       }
     },
-    allowedFormats: ['jpg', 'jpeg', 'png'],
+  //  allowedFormats: ['jpg', 'jpeg', 'png'],
 
     public_id: async (req:any, file:any) => {
+      console.log(file.originalname);
       const myFileName = `${Date.now()}-${file.originalname}`;
       return myFileName;
     },
-    cloud_name: process.env.CLOUD_NAME,
+   /* cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.API_KEY,
-    api_secret: process.env.API_SECRET,
+    api_secret: process.env.API_SECRET,*/
   },
 });
 
@@ -39,20 +49,21 @@ const upload = multer({
   },
   fileFilter: function (req: any, file: any, cb: any) {
     console.log(file);    
-    try {
-      const ext = path.extname(file.originalname);
-      if (!['.png', '.jpg', '.jpeg'].includes(ext)) {
-        return cb(new AppError('Only images are allowed', 400));
+      if (!['png', 'jpg', 'jpeg'].includes(file.mimetype.split('/')[1])) {
+        console.log(file.mimetype.split('/')[0]);
+        return cb(new AppError('Only images are allowed', 400), null);
       }
-      cb(null, true);
-    } catch (e) {
-      return cb(true, null);
+      return cb(null, true);
     }
-  },
-});
+  });
+
+
+const removeImage =  async(url: string) =>{
+  if(url === 'https://res.cloudinary.com/dttgbrris/image/upload/v1681003634/3899618_mkmx9b.png') return;
+  cloudinary.uploader.destroy(url,{ resource_type: 'image'})
+      .then((result:any) =>console.log(result));
+}
 
 
 
-
-
-export { upload };
+export { upload , removeImage};
