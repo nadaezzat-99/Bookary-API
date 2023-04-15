@@ -11,7 +11,9 @@ const getUserBooks = async (user: ObjectId, options: { page: number; limit: numb
   const pageNumber = options.page ? options.page : 1;
   const totalDocs = (await UserBooks.find({ user: user, shelf:options.shelf })).length;
   const totalPages = Math.floor(totalDocs / pageSize);
-  const docs = await UserBooks.find({ user: user, shelf:options.shelf })
+  let filter:{ user:ObjectId, shelf?:Shelf  } = { user , shelf: options.shelf }
+  if(!options.shelf) filter = { user } 
+  const docs = await UserBooks.find(filter)
     .populate({
       path: 'book',
       select: 'name bookImage authorId averageRating',
