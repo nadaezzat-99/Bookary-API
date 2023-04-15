@@ -46,31 +46,6 @@ const schema = new Schema<Book>(
       type:Number,
       default:0
     },
-    reviews: {
-      type: [
-        {
-          comment: {
-            type: String,
-            required: true,
-            minlength: 3,
-            maxlength: 140,
-          },
-
-          userId: {
-            type: Schema.Types.ObjectId,
-            ref: 'Users',
-            required: true,
-          },
-
-          rating: {
-            type: Number,
-            required: true,
-            default: 0,
-          },
-        },
-      ],
-      required: false,
-    },
   },
   {
     timestamps: true,

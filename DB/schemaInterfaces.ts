@@ -32,12 +32,6 @@ interface User {
   userName: string;
   pImage?: string;
   role: Role;
-  books?: [
-    {
-      book: number;
-      shelve: Shelf;
-    }
-  ];
 }
 interface Book extends Document {
   _id: number;
@@ -48,7 +42,6 @@ interface Book extends Document {
   totalRating: number;
   ratingsNumber: number;
   description?: string;
-  reviews?: review[];
 }
 
 interface PaginatedBooks {
@@ -112,6 +105,21 @@ interface Author {
   bio: string;
 }
 
+
+interface Author {
+  _id: Number;
+  authorImg?: string;
+  firstName: string;
+  lastName: string;
+  history: string;
+  DOB: Date;
+  bio: string;
+}
+
+interface AuthorModel extends Model<Author> {
+  getNewId: () => Promise<number>;
+}
+// Here
 interface UserBooks {
   populate: (options: any) => any;
   books: {
@@ -146,6 +154,7 @@ export {
   Entities,
   Counter,
   Author,
+  AuthorModel,
   categoryModel,
   PaginatedBooks,
   BookModel,

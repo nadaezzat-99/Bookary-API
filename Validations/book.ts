@@ -43,9 +43,10 @@ const filter = {
   query: Joi.object().keys({
     page: Joi.number().min(1),
     limit: Joi.number().min(1),
-    shelf: Joi.string().valid(Shelf.READ,Shelf.READING,Shelf.WANT2READ)
+    shelf: Joi.string().valid(Shelf.READ,Shelf.READING,Shelf.WANT2READ),
   }),
 };
+
 
 module.exports = {
   bookData,

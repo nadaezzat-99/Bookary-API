@@ -29,7 +29,7 @@ const storage = new CloudinaryStorage({
     },
     public_id: async (req:any, file:any) => {
       console.log(file.originalname);
-      const myFileName = `${Date.now()}-${file.originalname.split('.')[-1]}`;
+      const myFileName = `${Date.now()}-${file.originalname.split('.')[0]}`;
       return myFileName;
     },},
 });

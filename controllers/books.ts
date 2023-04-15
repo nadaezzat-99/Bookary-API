@@ -1,4 +1,3 @@
-import { log } from "console";
 import { Book, PaginatedBooks } from "../DB/schemaInterfaces";
 import { AppError, trimText } from "../lib";
 
@@ -62,19 +61,22 @@ const getBookById_fullInfo = async (id: number) => {
   return { book, reviews };
 };
 
-const getBooks_fullInfo = async (options: { page: number; limit: number }) => {
+const getBooks_fullInfo = async (options: { page: number; limit: number, keyWord?:string }) => {
   if (!options.limit) options.limit = 10;
   if (!options.page) options.page = 1;
+  let filter = {};
+  if(options.keyWord) filter ={ name: { $regex: options.keyWord, $options: 'i' } } 
   const result = (await Books.paginate(
-    {},
+    filter,
     {
       ...options,
-      populate: ["authorId", "categoryId"],
-      select: "-createdAt -updatedAt -totalRating ",
+      populate: [{ path: 'authorId', select: 'firstName lastName' }, { path: 'categoryId', select: 'name' }],
+      select: "name bookImage ratingsNumber totalRating  averageRating",
     }
   )) as PaginatedBooks;
   return result as PaginatedBooks;
 };
+
 
 const getPaginatedBooks = async (options: {
   page: number;
@@ -103,25 +105,16 @@ const getPopularBooks = async () =>
             {
               $multiply: [
                 {
-                  $divide: [{ $divide: ["$totalRating", "$ratingsNumber"] }, 5],
-                },
-                0.7,
-              ],
-            },
+                  $divide: [{ $divide: ["$totalRating", "$ratingsNumber"] }, 5]},0.7]},
             {
               $multiply: ["$ratingsNumber", 0.3],
-            },
-          ],
-        },
-      },
-    },
-
+            }]}}},
     {
       $sort: { popularity: -1 },
     },
 
     {
-      $limit: 5,
+      $limit: 4,
     },
   ]);
 

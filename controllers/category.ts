@@ -1,9 +1,5 @@
 import { ObjectId } from "mongoose";
-import {
-  Category,
-  PaginatedCategories,
-  PaginatedBooks,
-} from "../DB/schemaInterfaces";
+import { Category, PaginatedCategories, PaginatedBooks} from "../DB/schemaInterfaces";
 import { AppError } from "../lib";
 
 const Categories = require("../DB/models/category");
@@ -52,27 +48,17 @@ const getPopularcategories = async () =>
     {
       $match: {
         ratingsNumber: { $gt: 0 },
-      },
-    },
+      }},
     {
       $addFields: {
         popularity: {
           $add: [
             {
               $multiply: [
-                {
-                  $divide: [{ $divide: ["$totalRating", "$ratingsNumber"] }, 5],
-                },
-                0.7,
-              ],
-            },
+                {$divide: [{ $divide: ["$totalRating", "$ratingsNumber"] }, 5]}, 0.7]},
             {
               $multiply: ["$ratingsNumber", 0.3],
-            },
-          ],
-        },
-      },
-    },
+            }]}}},
     {
       $group: {
         _id: "$categoryId",
@@ -84,7 +70,7 @@ const getPopularcategories = async () =>
       $sort: { booksPopularity: -1, booksNumber: -1 },
     },
     {
-      $limit: 5,
+      $limit: 4,
     },
     {
       $lookup: {
@@ -107,6 +93,7 @@ const getPopularcategories = async () =>
       },
     },
   ]);
+
 
 module.exports = {
   create,

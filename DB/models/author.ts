@@ -1,9 +1,11 @@
 import { Schema, model } from 'mongoose';
 const validator = require('validator');
-import { Author } from '../schemaInterfaces';
+import { Author, AuthorModel } from '../schemaInterfaces';
 import mongoosePaginate from 'mongoose-paginate-v2';
 import { AppError } from '../../lib';
 const Books = require('./book');
+const Counters = require('./counter');
+
 
 
 const schema = new Schema<Author>(
@@ -67,6 +69,24 @@ schema.virtual('fullName').get(function () {
 });
 
 
+// Get new Incremental ID For Book Document
+schema.statics.getNewId = async () => {
+  const authorCounter = await Counters.findOneAndUpdate({ id: "authorInc" }, { $inc: { seq: 1 } }, { new: true });
+  if (!authorCounter) {
+    Counters.create({ id: "authorInc" , seq: 1 });
+    return 1;
+  }
+  return authorCounter.seq;
+};
+
+// Set Incremantal Id pre saving document
+schema.pre('save', { document: true, query: true }, async function () {
+  if (this.isNew) {
+    this._id = await Author.getNewId();
+  }
+});
+
+
 schema.pre('findOneAndDelete', async function preDelete(next) {
   const authorId = this.getQuery()['_id'];
   const authordata =  await Books.countDocuments({authorId:authorId});
@@ -78,5 +98,5 @@ schema.pre('findOneAndDelete', async function preDelete(next) {
   }
 })
 
-const Author = model('Authors', schema);
+const Author = model<Author, AuthorModel>('Authors', schema);
 module.exports = Author;

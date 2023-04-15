@@ -8,7 +8,6 @@ const Users = require('../DB/models/user');
 
 const verifyToken = async (token: string) => {
   const decoded = jwt.verify(token, process.env.TOKEN_KEY);
-  console.log(decoded);
   const user = await Users.findOne({ userName:decoded.userName});
   if(!user) throw new AppError('un-authenticated',401); 
   return user;
@@ -32,7 +31,6 @@ const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!token) throw new AppError('Unauthenticated-User',401);
     const result = await verifyToken(token);
-    console.log(result.role)
     if (result.role !== Role.ADMIN) throw new AppError('Unauthorized-User',403);
     req.user = result;
     next();

@@ -1,9 +1,7 @@
 const jwt = require('jsonwebtoken');
-import { cache } from 'joi';
-import { User, UserBooks } from '../DB/schemaInterfaces';
+import { User } from '../DB/schemaInterfaces';
 const Users = require('../DB/models/user');
-import { AppError, asycnWrapper } from '../lib/index';
-const userBooks = require("../DB/models/userBooks")
+import { AppError } from '../lib/index';
 
 const createToken = (user: User) => {
   const token = jwt.sign({ userName: user.userName, userId:user._id }, process.env.TOKEN_KEY, { expiresIn: '14d' });

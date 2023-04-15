@@ -1,11 +1,12 @@
 const Authors = require("../DB/models/author");
 const Books = require("../DB/models/book");
-import { Author, Book, PaginatedBooks } from "../DB/schemaInterfaces";
+import { Author, PaginatedBooks } from "../DB/schemaInterfaces";
 
 const createAuthor = (data: Author) => Authors.create(data);
 
 const getAuthors = (options: { limit: number; page: number }): Author => {
   if (!options.limit) options.limit = 5;
+  if (!options.page) options.page = 1;
   return Authors.paginate({}, options);
 };
 
@@ -14,18 +15,16 @@ const updateAuthor = (id: number, data: Author) =>
 
 const deleteAuthor = (id: number) => Authors.findOneAndDelete({ _id: id });
 
-const authorBooks = (
-  id: number,
-  page: number,
-  limit: number
-): PaginatedBooks => {
+const authorBooks = ( id: number, page: number, limit: number ): PaginatedBooks => {
   const selection = "name bookImage ratingsNumber averageRating";
   if (!limit) limit = 3;
+  if (!page) page = 1;
   return Books.paginate(
     { authorId: id },
     { limit, page, select: selection }
   ) as PaginatedBooks;
 };
+
 
 const getPopularAuthors = async () =>
   await Books.aggregate([
