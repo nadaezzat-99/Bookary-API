@@ -26,10 +26,10 @@ router.post('/', upload.single("authorImg"),validate(authorValidator.validateAut
         _id = incrementalId.seq;
     }
     const { body:{ firstName, lastName, DOB , bio } } = req; 
-    const author = authorController.createAuthor({ _id , firstName, lastName, DOB, bio});
-    // const author = authorController.createAuthor({ _id , firstName, lastName, DOB, bio, authorImg});
+    const author = authorController.createAuthor({ _id , firstName, lastName, DOB, bio, authorImg});
     const [err, data] = await asycnWrapper(author);
     if(err) return next(err);
+
     res.status(200).json({message:"Author Added successfully"});
   });  
 
@@ -39,11 +39,10 @@ router.post('/', upload.single("authorImg"),validate(authorValidator.validateAut
     validate(authorValidator.checkvalidID),
     validate(authorValidator.validateAuthor),
     async (req:Request, res:Response, next:NextFunction) => {
-      // const authorImg = req.file?.path
+      const authorImg = req.file?.path
       const { params:{ id }} = req 
       const { body:{ firstName, lastName, bio, DOB } } = req; 
-      // const author = authorController.updateAuthor(id,{  firstName, lastName, bio, DOB, authorImg});
-      const author = authorController.updateAuthor(id,{  firstName, lastName, bio, DOB});
+      const author = authorController.updateAuthor(id,{  firstName, lastName, bio, DOB, authorImg});
       let [err, data] = await asycnWrapper(author);
       if (err) return next(err);
       if (!data) return next(new AppError (`No Author with ID ${id}`, 400)); 

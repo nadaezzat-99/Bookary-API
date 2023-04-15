@@ -3,6 +3,8 @@ import Joi from 'joi';
 const validateAuthor = {
     body: Joi.object().required().keys({
         firstName: Joi.string()
+        .required()
+        .trim()
         .min(3)
         .max(15)
         .required()
@@ -12,15 +14,18 @@ const validateAuthor = {
             'string.max': 'First name must be at most 15 characters',
         }),
         lastName: Joi.string()
+        .required()
+        .trim()
         .min(3)
         .max(15)
-        .required()
         .messages({
             'string.empty': 'Last name is a required field',
             'string.min': 'Last name must be at least 3 characters',
             'string.max': 'Last name must be at most 15 characters',
         }),
         bio: Joi.string()
+        .required()
+        .trim()
         .min(30)
         .max(300)
         .messages({

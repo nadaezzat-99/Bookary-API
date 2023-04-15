@@ -1,11 +1,11 @@
-import express, { Application, NextFunction, Request, Response, ErrorRequestHandler } from 'express';
+import express, { Application } from 'express';
 import { AppError } from './lib';
+
 const { handleResponseError } = require('./lib/handlingErrors');
 const app: Application = express();
-const cookieParser = require("cookie-parser");
 const cors = require('cors');
 
-
+const cookieParser = require("cookie-parser");
 const routes = require('./routes/index.ts');
 require('./DB/connects');
 
@@ -18,12 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use('/', routes.userRoute);
-app.use('/admin', routes.adminRoute);
-app.use('/books', routes.bookRoute);
-app.use('/authors', routes.authorRoute);
-app.use('/categories', routes.CategoryRoute);
-app.use('/user', routes.userBooksRoute);
+app.use('/',routes);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));

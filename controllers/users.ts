@@ -9,22 +9,14 @@ const createToken = (user: User) => {
   return token;
 };
 
-const create = (data: User) => {
-  return Users.create(data).then((user:any) => {
-    const createUserBooks = new userBooks({
-      userId:user._id
-    })
-    createUserBooks.save();
-  })
-  
-};
+const create = (data: User) =>  Users.create(data);
 
 const signIn = async (loginedUser: { userName: string; password: string }) => {
   const user = await Users.findOne({ userName: loginedUser.userName });
   if (!user) throw new AppError('un-authenticated', 401);
   const valid = user.verifyPassword(loginedUser.password);
   if (!valid) throw new AppError('un-authenticated', 401);
-  return createToken(user);
+  return {token: createToken(user), user};
 };
 
 module.exports = {

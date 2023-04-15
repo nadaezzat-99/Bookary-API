@@ -14,12 +14,14 @@ router.get('/books', validate(paginationOptions), async (req: Request, res: Resp
   const user = userBooksController.getUserBooks(req.user._id, { page, limit });
   const [err, data] = await asycnWrapper(user);
   if (err) return next(err);
-  res.status(200).json({ success: true, data, result: data.length });
+  res.status(200).json({ success: true, data });
 });
 
 router.patch('/books/:bookId', validate(booksValidator.updateUserBook), async (req: Request, res: Response, next: NextFunction) => {
   const { bookId } = req.params;
   const { rating, review, shelf } = req.body;
+  console.log('hey');
+  
   try {
     const message = await userBooksController.updateUserBooks({
       userId: req.user._id,
