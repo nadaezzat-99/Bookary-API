@@ -1,4 +1,4 @@
-import express, { Application } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import { AppError } from './lib';
 
 const { handleResponseError } = require('./lib/handlingErrors');
@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 app.use('/',routes);
 
-app.all('*', (req, res, next) => {
+app.all('*', (req:Request, res:Response, next:NextFunction) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
 });
 
