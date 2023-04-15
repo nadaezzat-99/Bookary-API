@@ -47,59 +47,6 @@ const getCategoyBooks = async (
   return categoryBooks as PaginatedBooks;
 };
 
-/*const getPopularcategories = async () =>
-  await Books.aggregate([
-    {
-      $match: {
-        ratingsNumber: { $gt: 0 },
-      },
-    },
-    {
-      $project: {
-        categoryId:1,
-        popularity: { 
-          $add: [
-            {
-              $multiply: [
-                {
-                  $divide: [{ $divide: ["$totalRating", "$ratingsNumber"] }, 5],
-                },
-                0.7,
-              ],
-            },
-            {
-              $multiply: ["$ratingsNumber", 0.3],
-            },
-          ],
-        }
-        }
-    },
-    {
-      $lookup: {
-        from: 'categories',
-        localField: 'categoryId',
-        foreignField: '_id',
-        as: 'category',
-      },
-    },
-      {
-          $group: {
-            _id: '$categoryId',
-            booksPopularity: { $sum: '$popularity'},
-            booksNumber:{ $sum: 1,},
-          },
-        },    
-
-    {
-      $sort: { booksPopularity: -1 , booksNumber: -1 }
-    },
-
-    {
-      $limit: 5,
-    },
-
-  ]);*/
-
 const getPopularcategories = async () =>
   await Books.aggregate([
     {

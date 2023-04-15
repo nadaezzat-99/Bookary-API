@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+import { cache } from 'joi';
 import { User, UserBooks } from '../DB/schemaInterfaces';
 const Users = require('../DB/models/user');
 import { AppError, asycnWrapper } from '../lib/index';

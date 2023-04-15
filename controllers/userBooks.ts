@@ -16,10 +16,10 @@ const getUserBooks = async (user: ObjectId, options: { page: number; limit: numb
   const docs = await UserBooks.find(filter)
     .populate({
       path: 'book',
-      select: 'name bookImage authorId averageRating',
+      select: 'name bookImage authorId totalRating ratingsNumber averageRating',
       populate: {
         path: 'authorId',
-        select: 'fullName',
+        select: 'firstName lastName',
       },
     }).select('-_id -user ')
     .skip((pageNumber-1) * pageSize)

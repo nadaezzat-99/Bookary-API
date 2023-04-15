@@ -26,6 +26,11 @@ const schema = new Schema({
         type: String,
       },
   },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
 schema.plugin(mongoosePaginate);

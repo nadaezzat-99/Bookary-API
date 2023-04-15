@@ -1,7 +1,5 @@
-import express, { Request, Response,NextFunction } from 'express';
 import { AppError } from '../lib/appError';
 const multer = require('multer');
-const path = require('path');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
@@ -29,17 +27,11 @@ const storage = new CloudinaryStorage({
           return `random-imgs`;
       }
     },
-  //  allowedFormats: ['jpg', 'jpeg', 'png'],
-
     public_id: async (req:any, file:any) => {
       console.log(file.originalname);
-      const myFileName = `${Date.now()}-${file.originalname}`;
+      const myFileName = `${Date.now()}-${file.originalname.split('.')[-1]}`;
       return myFileName;
-    },
-   /* cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.API_KEY,
-    api_secret: process.env.API_SECRET,*/
-  },
+    },},
 });
 
 const upload = multer({
