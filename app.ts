@@ -10,7 +10,7 @@ const routes = require('./routes/index.ts');
 require('./DB/connects');
 
 const corsOptions = {
-  origin: "http://localhost:4200",
+  origin: "https://bookary.netlify.app",
   credentials:true
 };
 app.use(cors(corsOptions));

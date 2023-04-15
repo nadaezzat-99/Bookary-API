@@ -37,7 +37,7 @@ const storage = new CloudinaryStorage({
 const upload = multer({
   storage,
   limits: {
-    fileSize: 1024 * 1024 * 0.25, // 250KB
+    fileSize: 1024 * 1024 * 0.5, // 500KB
   },
   fileFilter: function (req: any, file: any, cb: any) {
     console.log(file);    
@@ -53,7 +53,6 @@ const upload = multer({
 const removeImage =  async(url: string) =>{
   if(url === 'https://res.cloudinary.com/dttgbrris/image/upload/v1681003634/3899618_mkmx9b.png') return;
   cloudinary.uploader.destroy(url,{ resource_type: 'image'})
-      .then((result:any) =>console.log(result));
 }
 
 

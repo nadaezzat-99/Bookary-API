@@ -4,7 +4,6 @@ const retryDelayMs = 3000;
 let retryAttempts = 0;
   function connectWithRetry() {
     Conmongoose.connect(process.env.DB)
-    //process.env.DB || mongodb://localhost:27017/GoodReadsDB
       .then(() => {
         console.log('MongoDB connected successfully');
       })

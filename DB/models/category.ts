@@ -59,8 +59,8 @@ schema.pre('save', async function () {
 schema.pre('findOneAndDelete', async function preDelete(next) {
   const categoryId = this.getQuery()['_id'];
   const relatedBooks =  await Books.countDocuments({categoryId:categoryId});
-  if (relatedBooks > 0) {
-      const err = new AppError("Can't delete category with  books",409);
+  if (relatedBooks) {
+      const err = new AppError("Can't delete category with  books",422);
       next(err);
   } else {
       next();

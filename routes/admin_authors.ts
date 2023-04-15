@@ -30,7 +30,7 @@ router.post('/', upload.single("authorImg"),validate(authorValidator.validateAut
     const author = authorController.createAuthor({ _id , firstName, lastName, DOB, bio, authorImg});
     const [err, data] = await asycnWrapper(author);
     if(err) return next(err);
-    res.status(200).json({success :true, message:"Author Added successfully", data});
+    res.status(200).json({status:'success', message:"Author Added successfully", data});
   });  
 
   router.patch('/:id', upload.single("authorImg"), validate(authorValidator.checkvalidID), validate(authorValidator.validateAuthor), async (req:Request, res:Response, next:NextFunction) => {
@@ -41,7 +41,7 @@ router.post('/', upload.single("authorImg"),validate(authorValidator.validateAut
       let [err, data] = await asycnWrapper(author);
       if (err) return next(err);
       if (!data) return next(new AppError (`No Author with ID ${id}`, 400)); 
-      res.status(200).json({success :true , message:"Author updated successfully" , data});
+      res.status(200).json({ status:'success' , message:"Author updated successfully" , data});
   });  
 
 
@@ -59,7 +59,7 @@ router.delete('/:id', validate(authorValidator.checkvalidID), async (req:Request
       let [err, data] = await asycnWrapper(author);
       if (err) return next(err);
       if (!data) return next(new AppError (`No Author with ID ${id}`, 400)); 
-      res.status(200).json({message:"Author deleted successfully"});
+      return res.status(200).json({ status:'success', message:'One Author is deleted' });
   });  
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import { Book, PaginatedBooks } from "../DB/schemaInterfaces";
+import { Book, PaginatedEntity} from "../DB/schemaInterfaces";
 import { AppError, trimText } from "../lib";
 
 const Books = require("../DB/models/book");
@@ -73,19 +73,19 @@ const getBooks_fullInfo = async (options: { page: number; limit: number, keyWord
       populate: [{ path: 'authorId', select: 'firstName lastName' }, { path: 'categoryId', select: 'name' }],
       select: "name bookImage ratingsNumber totalRating  averageRating",
     }
-  )) as PaginatedBooks;
-  return result as PaginatedBooks;
+  )) as PaginatedEntity<Book>;
+  return result as PaginatedEntity<Book>;
 };
 
 
 const getPaginatedBooks = async (options: {
   page: number;
   limit: number;
-}): Promise<PaginatedBooks> => {
+}): Promise<PaginatedEntity<Book>> => {
   if (!options.limit) options.limit = 10;
   if (!options.page) options.page = 1;
-  const result = (await Books.paginate({}, options)) as PaginatedBooks;
-  return result as PaginatedBooks;
+  const result = (await Books.paginate({}, options)) as PaginatedEntity<Book>;
+  return result as PaginatedEntity<Book>;
 };
 
 const getPopularBooks = async () =>

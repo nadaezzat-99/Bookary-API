@@ -11,7 +11,7 @@ const { page, limit , keyWord } = req.query;
 const book = booksController.getBooks_fullInfo({page, limit, keyWord });
 const [err, data] = await asycnWrapper(book);
 if (err) return next(err);
-res.status(200).json({ success: true, data , result: data.totalDocs });
+res.status(200).json({ status:'success', data });
 });
 
 
@@ -19,17 +19,16 @@ router.get('/popular', async (req: Request, res: Response, next: NextFunction) =
 const book = booksController.getPopularBooks();
 const [err, data] = await asycnWrapper(book);
 if (err) return next(err);
-res.status(200).json({ success: true, data });
+res.status(200).json({ status:'success', data });
 });
 
 
 router.get('/:id',  validate(booksValidator.bookId), async (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.user);
 const book = booksController.getBookById_fullInfo(req.params.id);
 const [err, data] = await asycnWrapper(book);
 if (err) return next(err);
-if (!data) return next(new AppError (`No book with ID ${req.params.id}`, 400)); 
-res.status(200).json({ success: true, data });
+if (!data) return next(new AppError (`No book with ID ${req.params.id}`, 422)); 
+res.status(200).json({ status:'success', data });
 });
 
 

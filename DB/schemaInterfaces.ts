@@ -1,4 +1,4 @@
-import mongoose, { Document, Model, ObjectId, Types } from 'mongoose';
+import  { Document, Model, ObjectId } from 'mongoose';
 
 enum Role {
   ADMIN = 'admin',
@@ -17,11 +17,6 @@ enum Entities {
   CATEGORIIES = 2,
 }
 
-type review = {
-  comment: String;
-  user: Types.ObjectId;
-  rating: Number;
-};
 
 interface User {
   _id: ObjectId;
@@ -44,8 +39,9 @@ interface Book extends Document {
   description?: string;
 }
 
-interface PaginatedBooks {
-  docs: Book[];
+
+interface PaginatedEntity<T> {
+  docs: T[];
   totalDocs: number;
   limit: number;
   page?: number;
@@ -63,33 +59,6 @@ interface Category extends Document {
   name: string;
 }
 
-interface PaginatedCategories {
-  docs: Category[];
-  totalDocs: number;
-  limit: number;
-  page?: number;
-  totalPages: number;
-  nextPage?: number | null;
-  prevPage?: number | null;
-  pagingCounter: number;
-  hasPrevPage: boolean;
-  hasNextPage: boolean;
-  meta?: any;
-}
-
-interface counter extends Document {
-  _id: number;
-  count: number;
-}
-
-interface BookModel extends Model<Book> {
-  getNewId: () => Promise<number>;
-}
-
-interface categoryModel extends Model<Category> {
-  getNewId: () => Promise<number>;
-}
-interface counterModel extends Model<counter> {}
 
 interface Counter {
   id: String;
@@ -106,46 +75,23 @@ interface Author {
 }
 
 
-interface Author {
-  _id: Number;
-  authorImg?: string;
-  firstName: string;
-  lastName: string;
-  history: string;
-  DOB: Date;
-  bio: string;
+interface BookModel extends Model<Book> {
+  getNewId: () => Promise<number>;
+}
+
+interface categoryModel extends Model<Category> {
+  getNewId: () => Promise<number>;
 }
 
 interface AuthorModel extends Model<Author> {
   getNewId: () => Promise<number>;
 }
-// Here
-interface UserBooks {
-  populate: (options: any) => any;
-  books: {
-    book: {
-      _id: string;
-      name: string;
-      bookImage: string;
-      authorId: {
-        firstName: string;
-        lastName: string;
-      };
-      ratingsNumber: number;
-      averageRating: number;
-    };
-  }[];
-}
-interface BookData {
-  bookId: number;
-  shelf: Shelf;
-  rating?: number;
-  review?: string;
-}
-
-interface UserBookDocument extends mongoose.Document {
-  user: mongoose.Types.ObjectId;
-  books: Record<number, BookData>;
+interface UserBooks extends Document  {
+  book:number,
+  user:ObjectId,
+  rating:number,
+  shelf:Shelf,
+  review:string
 }
 
 export {
@@ -156,15 +102,10 @@ export {
   Author,
   AuthorModel,
   categoryModel,
-  PaginatedBooks,
   BookModel,
   Shelf,
-  counterModel,
   Category,
   Book,
-  PaginatedCategories,
-  review,
+  PaginatedEntity,
   UserBooks,
-  BookData,
-  UserBookDocument,
 };

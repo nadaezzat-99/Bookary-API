@@ -5,8 +5,6 @@ const schema  = new Schema<Counter>({
     seq:{
         type:Number,
     },
-},{
-    timestamps:true
 })
 
 const Counter = model("counter",schema);

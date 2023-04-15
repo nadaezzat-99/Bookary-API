@@ -1,5 +1,6 @@
-import mongoose, { Schema, Types, model } from 'mongoose';
-import { User, Role, Shelf } from '../schemaInterfaces';
+import mongoose, { Schema, model } from 'mongoose';
+import { User, Role } from '../schemaInterfaces';
+import { AppError } from '../../lib';
 const validator = require('validator');
 const bcryptjs = require('bcryptjs');
 
@@ -33,7 +34,7 @@ const schema = new Schema<User>(
       unique: true,
       validate(value: string) {
         if (!validator.isEmail(value)) {
-          throw new Error('Invalid email');
+          throw new AppError('Invalid email',400);
         }
       },
     },
@@ -46,7 +47,7 @@ const schema = new Schema<User>(
       //@iti43OS
       validate(value: string) {
         if (!value.match(/(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]/)) {
-          throw new Error('Password must contain at least one number , Capital letter and one special character');
+          throw new AppError('Password must contain at least one number , Capital letter and one special character' , 400);
         }
       },
     },

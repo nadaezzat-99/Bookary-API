@@ -1,8 +1,8 @@
 import mongoosePaginate from 'mongoose-paginate-v2';
 import mongoose, { Schema, model } from 'mongoose';
-import { Shelf } from '../schemaInterfaces';
+import { Shelf, UserBooks } from '../schemaInterfaces';
 
-const schema = new Schema({
+const schema = new Schema<UserBooks>({
   user: {
     type: mongoose.Types.ObjectId,
     ref: 'Users',

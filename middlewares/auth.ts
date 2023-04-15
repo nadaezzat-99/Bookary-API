@@ -13,13 +13,16 @@ const verifyToken = async (token: string) => {
   return user;
 };
 
+const checkAuth= async (token:string, selectedRole:Role) => {
+  if (!token) throw new AppError('un-authenticated',401); 
+  const result = await verifyToken(token);
+  if (result.role !== selectedRole) throw new AppError('Unauthorized-User',403);
+  return result;
+}
+
 const userAuth = async (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies.access_token;
   try {
-    if (!token) throw new AppError('Unauthorized', 403);
-    const result = await verifyToken(token);
-    if (result.role !== Role.USER) throw new AppError('Unauthorized-User',403);
-    req.user = result
+    req.user = checkAuth( req.cookies.access_token, Role.USER)
     next();
   } catch (err) {
     next(err);
@@ -27,12 +30,8 @@ const userAuth = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies.access_token;
   try {
-    if (!token) throw new AppError('Unauthenticated-User',401);
-    const result = await verifyToken(token);
-    if (result.role !== Role.ADMIN) throw new AppError('Unauthorized-User',403);
-    req.user = result;
+    req.user = checkAuth( req.cookies.access_token, Role.ADMIN)
     next();
   } catch (err) {
     next(err);

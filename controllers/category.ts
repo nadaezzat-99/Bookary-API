@@ -1,5 +1,5 @@
 import { ObjectId } from "mongoose";
-import { Category, PaginatedCategories, PaginatedBooks} from "../DB/schemaInterfaces";
+import { Book, Category,  PaginatedEntity } from "../DB/schemaInterfaces";
 import { AppError } from "../lib";
 
 const Categories = require("../DB/models/category");
@@ -13,14 +13,14 @@ const getCategories = () =>
 const getPaginatedCategories = async (options: {
   page: number;
   limit: number;
-}): Promise<PaginatedCategories> => {
+}): Promise<PaginatedEntity<Category>> => {
   if (!options.limit) options.limit = 10;
   if (!options.page) options.page = 1;
   const result = (await Categories.paginate(
     {},
     options
-  )) as PaginatedCategories;
-  return result as PaginatedCategories;
+  )) as PaginatedEntity<Category>;
+  return result as PaginatedEntity<Category>;
 };
 
 const editCategory = (data: { id: number; name: string }) =>
@@ -39,8 +39,8 @@ const getCategoyBooks = async (
   const categoryBooks = (await Books.paginate(
     { categoryId: id },
     { ...options, populate: "authorId" }
-  )) as PaginatedBooks;
-  return categoryBooks as PaginatedBooks;
+  )) as PaginatedEntity<Book>;
+  return categoryBooks as PaginatedEntity<Book>;
 };
 
 const getPopularcategories = async () =>

@@ -35,8 +35,8 @@ const schema = new Schema<Book>(
     },
     description: {
       type: String,
-      minlength: 30,
-      maxlength: 200,
+      minlength: 10,
+      maxlength: 140,
     },
     ratingsNumber: {
       type: Number,

@@ -11,7 +11,7 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   const categories = categoriesController.getCategories();
   const [err, data] = await asycnWrapper(categories);
   if (err) return next(err);
-  res.status(200).json({ success: true, data, result: data.length });
+  res.status(200).json({ status:'success', data, result: data.length });
 }
 );
 
@@ -19,7 +19,7 @@ router.get('/popular', async (req: Request, res: Response, next: NextFunction) =
   const categories = categoriesController.getPopularcategories();
   const [err, data] = await asycnWrapper(categories);
   if (err) return next(err);
-  res.status(200).json({ success: true, data });
+  res.status(200).json({ status:'success', data });
   });
   
 
@@ -28,7 +28,7 @@ router.get('/:id/books', validate(categoriesValidator.categoryId), validate(pagi
   const books = categoriesController.getCategoyBooks(req.params.id, {page, limit});
   const [err, data] = await asycnWrapper(books);
   if (err) return next(err);
-  res.status(200).json({ success: true, data, result: data.length });
+  res.status(200).json({ status:'success', data});
 }
 );
 

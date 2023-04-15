@@ -3,19 +3,18 @@ import Joi from 'joi';
 const validateAuthor = {
     body: Joi.object().required().keys({
         firstName: Joi.string()
+        .regex(/^[a-zA-Z]+$/)
         .required()
-        .trim()
         .min(3)
         .max(15)
-        .required()
         .messages({
             'string.empty': 'First name is a required field',
             'string.min': 'First name must be at least 3 characters',
             'string.max': 'First name must be at most 15 characters',
         }),
         lastName: Joi.string()
+        .regex(/^[a-zA-Z]+$/)
         .required()
-        .trim()
         .min(3)
         .max(15)
         .messages({

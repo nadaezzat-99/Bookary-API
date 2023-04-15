@@ -3,18 +3,17 @@ import Joi from 'joi';
 const signUp = {
     body: Joi.object().required().keys({
         firstName: Joi.string()
+        .trim()
+        .required()
+        .regex(/^[a-zA-Z]+$/)
         .min(3)
         .max(15)
-        .required()
         .messages({
             'string.empty': 'First name is a required field',
             'string.min': 'First name must be at least 3 characters',
             'string.max': 'First name must be at most 15 characters',
         }),
-        lastName: Joi.string()
-        .min(3)
-        .max(15)
-        .required()
+        lastName: Joi.string().trim().required().regex(/^[a-zA-Z]+$/).min(3).max(15).required()
         .messages({
             'string.empty': 'Last name is a required field',
             'string.min': 'Last name must be at least 3 characters',
@@ -26,18 +25,13 @@ const signUp = {
             'string.empty': 'Email is a required field',
             'string.email': 'Invalid email format',
         }),
-        userName: Joi.string().min(3).max(30)
-        .required()
+        userName: Joi.string().trim().required().regex(/^[a-zA-Z]+$/).min(3).max(30)
         .messages({
             'string.empty': 'User name is a required field',
             'string.min': 'Username must be at least 3 characters',
             'string.max': 'Username must be at most 30 characters',
         }),       
-        password: Joi.string().
-        required()
-        .min(8)
-        .pattern(/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]/)
-        .messages({
+        password: Joi.string().required().min(8).pattern(/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]/).messages({
             'string.empty': 'Password is a required field',
             'string.min': 'Password must be at least 8 characters',
             'string.pattern.base': 'Password must contain at least one number , Capital letter and one special character',

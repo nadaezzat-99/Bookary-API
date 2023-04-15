@@ -2,10 +2,10 @@ import Joi from 'joi';
 import { Shelf } from '../DB/schemaInterfaces';
 const bookData = {
   body: Joi.object().keys({
-    name: Joi.string().trim().min(3).max(30).required(),
+    name: Joi.string().regex(/^[a-zA-Z2-9\s]*$/).trim().min(3).max(30).required(),
     authorId: Joi.number().required(),
     categoryId: Joi.number().required(),
-    description: Joi.string().trim().min(30).max(200),
+    description: Joi.string().trim().min(10).max(140),
   }),
 };
 
@@ -17,10 +17,10 @@ const bookId = {
 
 const bookEdit = {
   body: Joi.object().keys({
-    name: Joi.string().trim().min(3).max(30),
+    name: Joi.string().regex(/^[a-zA-Z2-9\s]*$/).trim().min(3).max(30),
     authorId: Joi.number(),
     categoryId: Joi.number(),
-    description: Joi.string().trim().min(30).max(200),
+    description: Joi.string().trim().min(10).max(140),
   }).min(1)
 };
 

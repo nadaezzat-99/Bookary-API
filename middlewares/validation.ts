@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import Joi, { ValidationError } from 'joi';
+import { ValidationError } from 'joi';
 import { validationschema } from './validationSchema';
 import { AppError } from '../lib/appError';
 
