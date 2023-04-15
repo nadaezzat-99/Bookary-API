@@ -19,9 +19,7 @@ router.get('/books', validate(paginationOptions), async (req: Request, res: Resp
 
 router.patch('/books/:bookId', validate(booksValidator.updateUserBook), async (req: Request, res: Response, next: NextFunction) => {
   const { bookId } = req.params;
-  const { rating, review, shelf } = req.body;
-  console.log('hey');
-  
+  const { rating, review, shelf } = req.body;  
   try {
     const message = await userBooksController.updateUserBooks({
       userId: req.user._id,

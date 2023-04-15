@@ -35,8 +35,7 @@ const updateUserBook = {
       rating: Joi.number().min(1).max(5),
       review: Joi.string().trim().min(3).max(140),
       shelf: Joi.string().valid(Shelf.READ, Shelf.READING, Shelf.WANT2READ),
-    })
-    .min(1),
+    }).min(1),
 };
 
 module.exports = {
