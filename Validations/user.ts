@@ -25,7 +25,7 @@ const signUp = {
             'string.empty': 'Email is a required field',
             'string.email': 'Invalid email format',
         }),
-        userName: Joi.string().trim().required().regex(/^[a-zA-Z]+$/).min(3).max(30)
+        userName: Joi.string().trim().required().regex(/^[a-zA-Z0-9]+$/).min(3).max(30)
         .messages({
             'string.empty': 'User name is a required field',
             'string.min': 'Username must be at least 3 characters',
