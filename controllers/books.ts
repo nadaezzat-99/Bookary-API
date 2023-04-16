@@ -61,8 +61,9 @@ const getBookById_fullInfo = async (id: number, options: { page: number, limit: 
   const pageNumber = options.page ? options.page : 1;
   
   const totalDocs = (await UserBooks.find({ book: id })).length;
-  const totalPages = Math.floor(totalDocs / pageSize) ;
-  
+  let totalPages =  Math.floor(totalDocs / pageSize);
+  if(totalPages < 1 && totalDocs )  totalPages = 1
+
   const reviews = await UserBooks.find({ book: id })
     .populate({ path: "user", select: "firstName lastName userName  " })
     .select("review rating firstName lastName userName  ")
