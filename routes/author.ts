@@ -35,7 +35,7 @@ router.get('/:id', validate(authorValidator.checkvalidID), validate(paginationOp
     const authorBooks = authorController.authorBooks(id, page, limit);
     let [err, data] = await asycnWrapper(authorBooks);
     if (err) return next(err);
-    res.status(200).send({ status:'success', data });
+    res.status(200).send({ status:'success', data, author });
   });
  
 module.exports = router;

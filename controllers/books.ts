@@ -59,14 +59,17 @@ const getBookById_fullInfo = async (id: number, options: { page: number, limit: 
   
   const pageSize = options.limit ? options.limit : 10;
   const pageNumber = options.page ? options.page : 1;
-
+  
+  const totalDocs = (await UserBooks.find({ book: id })).length;
+  const totalPages = Math.floor(totalDocs / pageSize) ;
+  
   const reviews = await UserBooks.find({ book: id })
     .populate({ path: "user", select: "firstName lastName userName  " })
     .select("review rating firstName lastName userName  ")
     .skip((pageNumber - 1) * pageSize)
     .limit(pageSize);
 
-  return { book, reviews };
+  return { book, reviews , totalDocs, totalPages};
 };
 
 const getBooks_fullInfo = async (options: { page: number; limit: number, keyWord?:string }) => {
