@@ -1,6 +1,6 @@
 import express, { Request, Response, Router, NextFunction } from "express";
 const { categoriesController } = require("../controllers/index");
-import { AppError, asycnWrapper } from '../lib/index';
+import { asycnWrapper } from '../lib/index';
 const { validate } = require("../middlewares/validation");
 const { categoriesValidator, paginationOptions } = require("../Validations");
 
