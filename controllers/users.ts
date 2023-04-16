@@ -4,7 +4,7 @@ const Users = require('../DB/models/user');
 import { AppError } from '../lib/index';
 
 const createToken = (user: User) => {
-  const token = jwt.sign({ userName: user.userName, userId:user._id }, process.env.TOKEN_KEY, { expiresIn: '14d' });
+  const token = jwt.sign({ userName: user.userName, userId:user._id, role:user.role }, process.env.TOKEN_KEY, { expiresIn: '14d' });
   return token;
 };
 

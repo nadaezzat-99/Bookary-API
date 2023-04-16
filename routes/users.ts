@@ -23,8 +23,7 @@ router.post('/signin', validate(usersValidator.signIn), async (req: Request, res
   try {
     const { userName, password } = req.body;    
     const data = await userController.signIn({ userName, password });    
-    res.cookie('access_token', data.token, 
-    { httpOnly: true, secure: true}).status(200).json({status:'success', data:data.user })
+    res.status(200).json({status:'success', data })
   } catch (err) {
     next(err);
   }

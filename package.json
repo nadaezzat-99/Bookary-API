@@ -11,8 +11,7 @@
     "stack"
   ],
   "scripts": {
-    "build":"npm install && tsc",
-    "start": " npm run build && node server/index.js",
+    "start": "ts-node index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
