@@ -47,6 +47,18 @@ const filter = {
   }),
 };
 
+const getBookData = {
+  params: Joi.object().keys({
+    id: Joi.number().required(),
+  }),
+
+  query: Joi.object().keys({
+    page: Joi.number().min(1),
+    limit: Joi.number().min(1),
+  }),
+
+  
+}
 
 module.exports = {
   bookData,
@@ -54,4 +66,5 @@ module.exports = {
   bookEdit,
   updateUserBook,
   filter,
+  getBookData,
 };

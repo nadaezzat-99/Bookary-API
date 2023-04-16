@@ -22,7 +22,7 @@ const userAuth = async (req: Request, res: Response, next: NextFunction) => {
     const result = await verifyToken(bearerToken);
     if (result.role !== Role.USER) throw new AppError('Unauthorized-User',403);
     req.user = result
-    next();
+    return next();
   } catch (err) {
     next(err);
   }
@@ -35,7 +35,7 @@ const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
     const result = await verifyToken(bearerToken);
     if (result.role !== Role.ADMIN) throw new AppError('Unauthorized-User',403);
     req.user = result;
-    next();
+    return next();
   } catch (err) {
     next(err);
   }

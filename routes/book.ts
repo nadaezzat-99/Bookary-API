@@ -23,8 +23,9 @@ res.status(200).json({ status:'success', data });
 });
 
 
-router.get('/:id',  validate(booksValidator.bookId), async (req: Request, res: Response, next: NextFunction) => {
-const book = booksController.getBookById_fullInfo(req.params.id);
+router.get('/:id', validate(booksValidator.getBookData), async (req: Request, res: Response, next: NextFunction) => {    
+const {page, limit} = req.query;
+const book = booksController.getBookById_fullInfo(req.params.id, {limit, page});
 const [err, data] = await asycnWrapper(book);
 if (err) return next(err);
 if (!data) return next(new AppError (`No book with ID ${req.params.id}`, 422)); 

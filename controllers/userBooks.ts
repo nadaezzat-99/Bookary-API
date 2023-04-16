@@ -19,7 +19,7 @@ const getUserBooks = async (user: ObjectId, options: { page: number; limit: numb
       select: "name bookImage authorId totalRating ratingsNumber averageRating",
       populate: {
         path: "authorId",
-        select: "firstName lastName",
+        select: "firstName lastName authorImg ",
       },
     })
     .select("-_id -user ")

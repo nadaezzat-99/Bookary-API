@@ -1,5 +1,6 @@
+import { log } from "console";
 import { Book, PaginatedEntity} from "../DB/schemaInterfaces";
-import { AppError, trimText } from "../lib";
+import { AppError, asycnWrapper, trimText } from "../lib";
 
 const Books = require("../DB/models/book");
 const Categoris = require("../DB/models/category");
@@ -48,16 +49,23 @@ const deleteBook = (id: number) => Books.findByIdAndDelete(id);
 
 
 // Users View --->  Get Book with full data Info (Author name - Category name)
-const getBookById_fullInfo = async (id: number) => {
+const getBookById_fullInfo = async (id: number, options: { page: number, limit: number}) => {  
   const book = await Books.findById(id)
     .populate({ path: "authorId", select: "firstName lastName" })
     .populate({ path: "categoryId", select: "name" })
-    .select(" -createdAt -updatedAt -totalRating")
     .exec();
+
+  if (!book) throw new AppError(" Book doesn't exist ", 422);
+  
+  const pageSize = options.limit ? options.limit : 10;
+  const pageNumber = options.page ? options.page : 1;
 
   const reviews = await UserBooks.find({ book: id })
     .populate({ path: "user", select: "firstName lastName userName  " })
-    .select("review rating firstName lastName userName  ");
+    .select("review rating firstName lastName userName  ")
+    .skip((pageNumber - 1) * pageSize)
+    .limit(pageSize);
+
   return { book, reviews };
 };
 
